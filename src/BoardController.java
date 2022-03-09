@@ -67,29 +67,27 @@ public class BoardController {
                 switch (gameFrame.board.board[firstClickRow][firstClickCol].getPiece().getClass().getName()) {
                     case "Pawn":
                         if (whiteTurn == gameFrame.board.board[firstClickRow][firstClickCol].getPiece().isWhite()) {
+                            ArrayList<Integer> possiblePawnTakes1;
+                            ArrayList<Integer> possiblePawnTakes2;
+                            ArrayList<Integer> possiblePawnMoves;
                             if (whiteTurn) {
-                                ArrayList<Integer> possiblePawnMoves = move.possiblePawnMoves(firstClickRow, firstClickCol, gameFrame.board.board);
+                                possiblePawnMoves = move.possiblePawnMoves(firstClickRow, firstClickCol, gameFrame.board.board);
                                 gameFrame.board.setPossibleMoves(possiblePawnMoves);
-                                ArrayList<Integer> possiblePawnTakes1 = move.possiblePawnTakes(firstClickRow, firstClickCol, gameFrame.board.board, false, true);
-                                ArrayList<Integer> possiblePawnTakes2 = move.possibleTakingInFlight(firstClickRow, firstClickCol, gameFrame.board.board, previousBlackMove, true);
-                                ArrayList<Integer> possiblePawnTakes = new ArrayList<>();
-                                possiblePawnTakes.addAll(possiblePawnTakes1);
-                                possiblePawnTakes.addAll(possiblePawnTakes2);
-                                gameFrame.board.setPossibleTakes(possiblePawnTakes);
-                                pawnMovesToCheck = new ArrayList<>(possiblePawnMoves);
-                                pawnMovesToCheck.addAll(possiblePawnTakes);
+                                possiblePawnTakes1 = move.possiblePawnTakes(firstClickRow, firstClickCol, gameFrame.board.board, false, true);
+                                possiblePawnTakes2 = move.possibleTakingInFlight(firstClickRow, firstClickCol, gameFrame.board.board, previousBlackMove, true);
+
                             } else {
-                                ArrayList<Integer> possiblePawnMoves = move.possiblePawnMoves(firstClickRow, firstClickCol, gameFrame.board.board);
+                                possiblePawnMoves = move.possiblePawnMoves(firstClickRow, firstClickCol, gameFrame.board.board);
                                 gameFrame.board.setPossibleMoves(possiblePawnMoves);
-                                ArrayList<Integer> possiblePawnTakes1 = move.possiblePawnTakes(firstClickRow, firstClickCol, gameFrame.board.board, false, true);
-                                ArrayList<Integer> possiblePawnTakes2 = move.possibleTakingInFlight(firstClickRow, firstClickCol, gameFrame.board.board, previousWhiteMove, false);
-                                ArrayList<Integer> possiblePawnTakes = new ArrayList<>();
-                                possiblePawnTakes.addAll(possiblePawnTakes1);
-                                possiblePawnTakes.addAll(possiblePawnTakes2);
-                                gameFrame.board.setPossibleTakes(possiblePawnTakes);
-                                pawnMovesToCheck = new ArrayList<>(possiblePawnMoves);
-                                pawnMovesToCheck.addAll(possiblePawnTakes);
+                                possiblePawnTakes1 = move.possiblePawnTakes(firstClickRow, firstClickCol, gameFrame.board.board, false, true);
+                                possiblePawnTakes2 = move.possibleTakingInFlight(firstClickRow, firstClickCol, gameFrame.board.board, previousWhiteMove, false);
                             }
+                            ArrayList<Integer> possiblePawnTakes = new ArrayList<>();
+                            possiblePawnTakes.addAll(possiblePawnTakes1);
+                            possiblePawnTakes.addAll(possiblePawnTakes2);
+                            gameFrame.board.setPossibleTakes(possiblePawnTakes);
+                            pawnMovesToCheck = new ArrayList<>(possiblePawnMoves);
+                            pawnMovesToCheck.addAll(possiblePawnTakes);
 
                         }
                         break;
@@ -164,27 +162,9 @@ public class BoardController {
                                 if (whiteTurn == gameFrame.board.board[firstClickRow][firstClickCol].getPiece().isWhite()) {
                                     if (move.newPawnMove(firstClickRow, firstClickCol, secondClickRow, secondClickCol, gameFrame.board.board)) {
                                         if (whiteTurn) {
-                                            previousWhiteMove[0] = firstClickRow;
-                                            previousWhiteMove[1] = firstClickCol;
-                                            previousWhiteMove[2] = secondClickRow;
-                                            previousWhiteMove[3] = secondClickCol;
-
-
-                                            previousWhitePawnMove[0] = firstClickRow;
-                                            previousWhitePawnMove[1] = firstClickCol;
-                                            previousWhitePawnMove[2] = secondClickRow;
-                                            previousWhitePawnMove[3] = secondClickCol;
+                                            setPreviousPawnMoves(previousWhiteMove, previousWhitePawnMove);
                                         } else {
-                                            previousBlackPawnMove[0] = firstClickRow;
-                                            previousBlackPawnMove[1] = firstClickCol;
-                                            previousBlackPawnMove[2] = secondClickRow;
-                                            previousBlackPawnMove[3] = secondClickCol;
-
-
-                                            previousBlackMove[0] = firstClickRow;
-                                            previousBlackMove[1] = firstClickCol;
-                                            previousBlackMove[2] = secondClickRow;
-                                            previousBlackMove[3] = secondClickCol;
+                                            setPreviousPawnMoves(previousBlackPawnMove, previousBlackMove);
                                         }
                                         for (int i = 0; i < 8; i++) {
                                             if (gameFrame.board.board[0][i].getPiece().getClass().getName().equals("Pawn")) {
@@ -210,6 +190,7 @@ public class BoardController {
                                         whiteTurn = !whiteTurn;
                                         timerController.setWhiteTurn(whiteTurn);
                                         gameFrame.board.setWhiteTurn(whiteTurn);
+                                        gameFrame.board.setWhiteTurn(whiteTurn);
                                     }
                                 }
                                 break;
@@ -222,20 +203,7 @@ public class BoardController {
                             if (secondClickRow == knightMovesToCheck.get(j) && secondClickCol == knightMovesToCheck.get(j + 1)) {
                                 if (whiteTurn == gameFrame.board.board[firstClickRow][firstClickCol].getPiece().isWhite()) {
                                     if (move.knightMove(firstClickRow, firstClickCol, secondClickRow, secondClickCol, gameFrame.board.board)) {
-                                        if (whiteTurn) {
-                                            previousWhiteMove[0] = firstClickRow;
-                                            previousWhiteMove[1] = firstClickCol;
-                                            previousWhiteMove[2] = secondClickRow;
-                                            previousWhiteMove[3] = secondClickCol;
-                                        } else {
-                                            previousBlackMove[0] = firstClickRow;
-                                            previousBlackMove[1] = firstClickCol;
-                                            previousBlackMove[2] = secondClickRow;
-                                            previousBlackMove[3] = secondClickCol;
-                                        }
-                                        whiteTurn = !whiteTurn;
-                                        timerController.setWhiteTurn(whiteTurn);
-                                        gameFrame.board.setWhiteTurn(whiteTurn);
+                                        setPreviousMoves();
                                     }
                                 }
                             }
@@ -246,20 +214,7 @@ public class BoardController {
                             if (secondClickRow == rookMovesToCheck.get(j) && secondClickCol == rookMovesToCheck.get(j + 1)) {
                                 if (whiteTurn == gameFrame.board.board[firstClickRow][firstClickCol].getPiece().isWhite()) {
                                     if (move.rookMove(firstClickRow, firstClickCol, secondClickRow, secondClickCol, gameFrame.board.board)) {
-                                        if (whiteTurn) {
-                                            previousWhiteMove[0] = firstClickRow;
-                                            previousWhiteMove[1] = firstClickCol;
-                                            previousWhiteMove[2] = secondClickRow;
-                                            previousWhiteMove[3] = secondClickCol;
-                                        } else {
-                                            previousBlackMove[0] = firstClickRow;
-                                            previousBlackMove[1] = firstClickCol;
-                                            previousBlackMove[2] = secondClickRow;
-                                            previousBlackMove[3] = secondClickCol;
-                                        }
-                                        whiteTurn = !whiteTurn;
-                                        timerController.setWhiteTurn(whiteTurn);
-                                        gameFrame.board.setWhiteTurn(whiteTurn);
+                                        setPreviousMoves();
                                     }
                                 }
                             }
@@ -270,20 +225,7 @@ public class BoardController {
                             if (secondClickRow == bishopMovesToCheck.get(j) && secondClickCol == bishopMovesToCheck.get(j + 1)) {
                                 if (whiteTurn == gameFrame.board.board[firstClickRow][firstClickCol].getPiece().isWhite()) {
                                     if (move.bishopMove(firstClickRow, firstClickCol, secondClickRow, secondClickCol, gameFrame.board.board)) {
-                                        if (whiteTurn) {
-                                            previousWhiteMove[0] = firstClickRow;
-                                            previousWhiteMove[1] = firstClickCol;
-                                            previousWhiteMove[2] = secondClickRow;
-                                            previousWhiteMove[3] = secondClickCol;
-                                        } else {
-                                            previousBlackMove[0] = firstClickRow;
-                                            previousBlackMove[1] = firstClickCol;
-                                            previousBlackMove[2] = secondClickRow;
-                                            previousBlackMove[3] = secondClickCol;
-                                        }
-                                        whiteTurn = !whiteTurn;
-                                        timerController.setWhiteTurn(whiteTurn);
-                                        gameFrame.board.setWhiteTurn(whiteTurn);
+                                        setPreviousMoves();
                                     }
                                 }
                             }
@@ -294,20 +236,7 @@ public class BoardController {
                             if (secondClickRow == queenMovesToCheck.get(j) && secondClickCol == queenMovesToCheck.get(j + 1)) {
                                 if (whiteTurn == gameFrame.board.board[firstClickRow][firstClickCol].getPiece().isWhite()) {
                                     if (move.queenMove(firstClickRow, firstClickCol, secondClickRow, secondClickCol, gameFrame.board.board)) {
-                                        if (whiteTurn) {
-                                            previousWhiteMove[0] = firstClickRow;
-                                            previousWhiteMove[1] = firstClickCol;
-                                            previousWhiteMove[2] = secondClickRow;
-                                            previousWhiteMove[3] = secondClickCol;
-                                        } else {
-                                            previousBlackMove[0] = firstClickRow;
-                                            previousBlackMove[1] = firstClickCol;
-                                            previousBlackMove[2] = secondClickRow;
-                                            previousBlackMove[3] = secondClickCol;
-                                        }
-                                        whiteTurn = !whiteTurn;
-                                        timerController.setWhiteTurn(whiteTurn);
-                                        gameFrame.board.setWhiteTurn(whiteTurn);
+                                        setPreviousMoves();
                                     }
                                 }
                             }
@@ -318,20 +247,7 @@ public class BoardController {
                             if (secondClickRow == kingMovesToCheck.get(j) && secondClickCol == kingMovesToCheck.get(j + 1)) {
                                 if (whiteTurn == gameFrame.board.board[firstClickRow][firstClickCol].getPiece().isWhite()) {
                                     if (move.kingMove(firstClickRow, firstClickCol, secondClickRow, secondClickCol, gameFrame.board.board)) {
-                                        if (whiteTurn) {
-                                            previousWhiteMove[0] = firstClickRow;
-                                            previousWhiteMove[1] = firstClickCol;
-                                            previousWhiteMove[2] = secondClickRow;
-                                            previousWhiteMove[3] = secondClickCol;
-                                        } else {
-                                            previousBlackMove[0] = firstClickRow;
-                                            previousBlackMove[1] = firstClickCol;
-                                            previousBlackMove[2] = secondClickRow;
-                                            previousBlackMove[3] = secondClickCol;
-                                        }
-                                        whiteTurn = !whiteTurn;
-                                        timerController.setWhiteTurn(whiteTurn);
-                                        gameFrame.board.setWhiteTurn(whiteTurn);
+                                        setPreviousMoves();
                                     }
                                 }
                             }
@@ -381,6 +297,36 @@ public class BoardController {
                 gameFrame.board.setSelectedCol(8);
             }
             gameFrame.board.repaint();
+        }
+
+        private void setPreviousPawnMoves(int[] previousBlackPawnMove, int[] previousBlackMove) {
+            previousBlackPawnMove[0] = firstClickRow;
+            previousBlackPawnMove[1] = firstClickCol;
+            previousBlackPawnMove[2] = secondClickRow;
+            previousBlackPawnMove[3] = secondClickCol;
+
+
+            previousBlackMove[0] = firstClickRow;
+            previousBlackMove[1] = firstClickCol;
+            previousBlackMove[2] = secondClickRow;
+            previousBlackMove[3] = secondClickCol;
+        }
+
+        private void setPreviousMoves() {
+            if (whiteTurn) {
+                previousWhiteMove[0] = firstClickRow;
+                previousWhiteMove[1] = firstClickCol;
+                previousWhiteMove[2] = secondClickRow;
+                previousWhiteMove[3] = secondClickCol;
+            } else {
+                previousBlackMove[0] = firstClickRow;
+                previousBlackMove[1] = firstClickCol;
+                previousBlackMove[2] = secondClickRow;
+                previousBlackMove[3] = secondClickCol;
+            }
+            whiteTurn = !whiteTurn;
+            timerController.setWhiteTurn(whiteTurn);
+            gameFrame.board.setWhiteTurn(whiteTurn);
         }
 
         @Override

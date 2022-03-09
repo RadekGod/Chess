@@ -255,7 +255,7 @@ public ArrayList<Integer> possiblePawnTakes(int row, int col, Spot[][] board, bo
                     possibleMoves.add(col);
                 }
             }
-        } else if (!board[row][col].getPiece().isWhite()) {
+        } else {
             if (board[row][col].getPiece().isFirstMove()) {
                 if (board[row + 2][col].isFieldEmpty() && board[row + 1][col].isFieldEmpty()) {
                     possibleMoves.add(row + 2);
@@ -2068,7 +2068,6 @@ public ArrayList<Integer> possiblePawnTakes(int row, int col, Spot[][] board, bo
             checkForRightSideKingMoves(row, col, board, possibleMoves, possibleTakes);
             checkForVerticalKingMoves(row, col, board, possibleMoves, possibleTakes);
         }
-        System.out.println(possibleMoves);
         if (wantMove) {
             return  possibleMoves;
         } else {
@@ -2231,7 +2230,6 @@ public ArrayList<Integer> possiblePawnTakes(int row, int col, Spot[][] board, bo
                                 }
                             }
                         }
-                    System.out.println("Mobbyn2 :" + possibleKingMoves);
                 } else if (board[i][j].getPiece().getClass().getName().equals("Bishop") && (!isTheSameColor(row, col, i, j, board))) {
                     ArrayList<Integer> possibleBishopMoves = possibleBishopMoves(i, j, board, WANT_MOVES);
                     loop: for (int k = 0; k < possibleBishopMoves.size(); k += 2) {

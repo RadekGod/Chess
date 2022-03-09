@@ -40,6 +40,7 @@ public class Board extends JPanel {
 
 
     public void resetVariables() {
+        whiteTurn = true;
         possibleMoves = new ArrayList<>();
         possibleTakes = new ArrayList<>();
         possibleCheckMate = new ArrayList<>();
